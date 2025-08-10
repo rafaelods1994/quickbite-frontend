@@ -2,7 +2,7 @@ import { Dish } from '../types/Dish';
 
 const API_BASE = 'http://localhost:3000/api/dishes';
 
-export const fetchDishes = async () => {
+export const fetchDishes = async (): Promise<Dish[]> => {
   const res = await fetch(`${API_BASE}`);
   if (!res.ok) throw new Error('Failed to fetch dishes');
   return res.json();

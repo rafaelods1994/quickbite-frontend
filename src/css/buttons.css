@@ -1,0 +1,25 @@
+button {
+  background-color: #007bff;
+  color: white;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+button.delete {
+  background-color: #dc3545;
+}
+
+button.delete:hover {
+  background-color: #a71d2a;
+}
+
+button.edit {
+  background-color: #ffc107;
+  color: black;
+}
+
+button.edit:hover {
+  background-color: #e0a800;
+}

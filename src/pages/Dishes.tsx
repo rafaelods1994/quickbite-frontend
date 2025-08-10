@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { fetchDishes, createDish, deleteDish, updateDish } from '../api/dishes';
 import { Dish } from '../types/Dish';
-
+import '../css/styles.css';
 
 const Dishes = () => {
   const [dishes, setDishes] = useState<Dish[]>([]);
@@ -125,9 +125,8 @@ const Dishes = () => {
               <strong>{dish.name}</strong> - ${dish.price.toFixed(2)}<br />
               <em>{dish.description}</em><br />
               {dish.available ? '✅ Available' : '❌ Unavailable'}<br />
-              <button onClick={() => handleDelete(dish.id)}>🗑️ Delete</button>
-              <button onClick={() => startEditing(dish)}>✏️ Edit</button>
-
+              <button className="delete" onClick={() => handleDelete(dish.id)}>🗑️ Delete</button>
+              <button className="edit" onClick={() => startEditing(dish)}>✏️ Edit</button>
               {editingId === dish.id && (
                 <form
                   onSubmit={e => {

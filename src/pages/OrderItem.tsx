@@ -5,17 +5,22 @@ import { fetchDishes } from '../api/dishes';
 import type { OrderItemInput, OrderItem } from '../types/OrderItem';
 import type { Order } from '../types/Order';
 import type { Dish } from '../types/Dish';
+import { fetchUsers } from '../api/users';
+import type { User } from '../types/User';
+
 
 export default function OrderItemManager() {
     const [items, setItems] = useState<OrderItem[]>([]);
     const [orders, setOrders] = useState<Order[]>([]);
     const [dishes, setDishes] = useState<Dish[]>([]);
+    const [users, setUsers] = useState<User[]>([]);
     const [form, setForm] = useState<OrderItemInput>({ orderId: 1, dishId: 1, quantity: 1 });
 
     useEffect(() => {
         fetchOrderItems().then(setItems).catch(console.error);
         fetchOrders().then(setOrders).catch(console.error);
         fetchDishes().then(setDishes).catch(console.error);
+        fetchUsers().then(setUsers).catch(console.error);
     }, []);
 
     const handleCreate = async () => {
@@ -49,12 +54,16 @@ export default function OrderItemManager() {
                     onChange={e => setForm({ ...form, orderId: +e.target.value })}
                 >
                     <option value="">Select an order</option>
-                    {orders.map(order => (
-                        <option key={order.id} value={order.id}>
-                            Order #{order.id} — User {order.userId}
-                        </option>
-                    ))}
+                    {orders.map(order => {
+                        const user = users.find(u => u.id === order.userId);
+                        return (
+                            <option key={order.id} value={order.id}>
+                                Order #{order.id} — {user?.name ?? `User ${order.userId}`}
+                            </option>
+                        );
+                    })}
                 </select>
+
             </label>
 
             <label>
@@ -92,14 +101,18 @@ export default function OrderItemManager() {
                 <p>No items yet.</p>
             ) : (
                 <ul>
-                    {items.map(item => (
-                        <li key={item.id}>
-                            <strong>Order #{item.orderId}</strong> — Dish #{item.dishId} × {item.quantity}
-                            <button onClick={() => handleDelete(item.id)} style={{ marginLeft: '1rem' }}>
-                                Delete
-                            </button>
-                        </li>
-                    ))}
+                    {items.map(item => {
+                        const dish = dishes.find(d => d.id === item.dishId);
+                        return (
+                            <li key={item.id}>
+                                <strong>Order #{item.orderId}</strong> — {dish?.name ?? `Dish #${item.dishId}`} × {item.quantity}
+                                <button onClick={() => handleDelete(item.id)} style={{ marginLeft: '1rem' }}>
+                                    Delete
+                                </button>
+                            </li>
+                        );
+                    })}
+
                 </ul>
             )}
         </div>
